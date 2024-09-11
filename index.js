@@ -6,7 +6,20 @@ const app = express();
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
-  let xml = process.env.xml;
+  res.status(200).send("Hello");
+});
+
+app.get("/:type/:pin", (req, res) => {
+  let pause = {teams: 25, google: 4};
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Pause length="3" />
+    <Play digits="${req.params.pin}#" />
+    <Pause length="${pause[req.params.type]}" />
+    <Say>This meeting is being recorded.</Say>
+    <Record timeout="300" />
+</Response>`;
+
   res.header('Content-Type', 'text/xml');
   res.status(200).send(xml);
 });
